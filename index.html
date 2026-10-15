@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1020">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>MPI Studio — Pembuat Media Pembelajaran Interaktif</title>
+<style>
+:root{--bg:#0b1020;--panel:#121a2e;--panel2:#17223a;--line:#293653;--text:#edf3ff;--muted:#9eacc8;--cyan:#56e0d1;--blue:#7597ff;--yellow:#ffd166;--pink:#f38ba8;--green:#73e2a7;--radius:18px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0%,#1a2c53 0,transparent 34%),var(--bg);color:var(--text);font:15px/1.5 Inter,Segoe UI,Arial,sans-serif}
+button,input,textarea,select{font:inherit}button{cursor:pointer;border:0;border-radius:11px;padding:10px 14px;background:linear-gradient(135deg,var(--cyan),#8ce8dc);color:#07131c;font-weight:750;transition:.2s}button:hover{transform:translateY(-1px);filter:brightness(1.07)}button.secondary{background:#202d48;color:var(--text);border:1px solid var(--line)}button.ghost{background:transparent;border:1px solid var(--line);color:var(--muted)}button.danger{background:#4b2535;color:#ffdce5;border:1px solid #77394d}
+.top{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 24px;background:#0b1020eF;border-bottom:1px solid var(--line);backdrop-filter:blur(18px)}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--cyan),var(--blue));color:#091321;font-weight:900;font-size:19px;box-shadow:0 8px 30px #56e0d133}.brand h1{font-size:17px;margin:0}.brand small{display:block;color:var(--muted);font-size:12px}.top-actions{display:flex;gap:8px;flex-wrap:wrap}
+.shell{display:grid;grid-template-columns:250px minmax(0,1fr);max-width:1600px;margin:auto;min-height:calc(100vh - 72px)}
+aside{padding:22px 15px;border-right:1px solid var(--line);background:#0e1527a8}.side-label{text-transform:uppercase;letter-spacing:1.5px;font-size:10px;color:#7384a7;font-weight:800;padding:0 12px;margin:10px 0}
+.nav{display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:11px 12px;background:transparent;color:#b7c4df;border:1px solid transparent;margin:3px 0;border-radius:12px;font-weight:600}.nav .num{width:26px;height:26px;display:grid;place-items:center;background:#1d2a43;border-radius:8px;color:var(--cyan);font-size:12px}.nav.active{background:linear-gradient(90deg,#1b3545,#18223a);border-color:#2b5861;color:#fff}.nav.active .num{background:var(--cyan);color:#06151b}.side-card{margin:25px 5px 0;padding:15px;border:1px solid var(--line);background:#111b30;border-radius:15px}.side-card b{display:block;margin-bottom:5px}.side-card p{color:var(--muted);font-size:12px;margin:0 0 12px}
+main{padding:26px;min-width:0}.eyebrow{color:var(--cyan);font-size:11px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase}.hero{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:22px}.hero h2{font-size:clamp(25px,3vw,36px);line-height:1.12;margin:7px 0 9px;letter-spacing:-.8px}.hero p{margin:0;color:var(--muted);max-width:720px}.pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid #31515c;background:#15303a;color:var(--cyan);font-size:11px;font-weight:800;white-space:nowrap}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:20px 0}.stat{padding:16px;border:1px solid var(--line);border-radius:15px;background:linear-gradient(145deg,#17233b,#11192b)}.stat .label{color:var(--muted);font-size:12px}.stat strong{display:block;font-size:23px;margin:4px 0}.stat small{color:#7185aa;font-size:11px}
+.workspace{display:grid;grid-template-columns:minmax(280px,.85fr) minmax(350px,1.15fr);gap:16px;align-items:start}.panel{background:linear-gradient(150deg,#151f35,#11182a);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;min-width:0}.panel-head{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}.panel-head h3{margin:0;font-size:15px}.panel-head p{margin:3px 0 0;color:var(--muted);font-size:12px}.panel-body{padding:18px}.field{margin-bottom:14px}.field label{display:block;font-size:12px;color:#c3cee4;font-weight:700;margin-bottom:6px}.field input,.field textarea,.field select{width:100%;background:#0c1425;color:var(--text);border:1px solid #2a3855;border-radius:10px;padding:11px 12px;outline:none}.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #56e0d11c}.field textarea{min-height:90px;resize:vertical}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.hint{color:#8292b2;font-size:11px;margin-top:5px}.actions{display:flex;gap:8px;flex-wrap:wrap}.preview{background:#080d18;padding:12px}.browser{overflow:hidden;border:1px solid #34405a;border-radius:13px;background:#fff;color:#182239}.browserbar{display:flex;align-items:center;gap:6px;padding:9px 12px;background:#e8edf6;border-bottom:1px solid #d2daea}.dot{width:8px;height:8px;border-radius:50%;background:#a5b1c6}.address{font-size:10px;color:#5d6b85;margin-left:8px;background:white;border-radius:5px;padding:4px 8px;flex:1}.preview-frame{min-height:425px}.preview-frame iframe{display:block;width:100%;height:510px;border:0;background:white}.preview-note{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:11px;padding:11px 4px 2px}
+.lower{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}.codebox{background:#080e1a;border:1px solid #263450;border-radius:12px;overflow:hidden}.code-top{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#111b2e;color:#9eb0d0;font-size:11px}.codebox textarea{width:100%;height:250px;background:#080e1a;color:#9ce9dc;border:0;resize:vertical;padding:14px;font:12px/1.6 Consolas,monospace;outline:none;white-space:pre}.step-content{display:none}.step-content.active{display:block}.checklist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.check{display:flex;gap:10px;padding:13px;background:#101a2d;border:1px solid var(--line);border-radius:12px}.check input{accent-color:var(--cyan);margin-top:4px}.check b{font-size:13px;display:block}.check span{font-size:11px;color:var(--muted)}.resource{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px;border-bottom:1px solid var(--line)}.resource:last-child{border:0}.resource b{display:block;font-size:13px}.resource small{color:var(--muted)}.resource a{color:var(--cyan);text-decoration:none;font-size:12px;font-weight:700}
+.toast{position:fixed;right:20px;bottom:20px;background:#dffcf4;color:#09251e;padding:13px 18px;border-radius:12px;box-shadow:0 12px 35px #0007;display:none;z-index:50;font-weight:700}.footer{color:#657696;text-align:center;padding:25px 0 8px;font-size:11px}
+
+.sb-cell{border-bottom:1px solid var(--line);padding:12px;vertical-align:top;color:#cbd6eb;max-width:260px;white-space:pre-wrap}
+@media print{body{background:white;color:#111}.top,aside,.hero .pill,.actions,.nav,.footer{display:none!important}.shell{display:block}main{padding:0}.step-content{display:none!important}#storyboard{display:block!important}.panel,.stat{background:white;color:#111;border:1px solid #bbb;break-inside:avoid}.panel-head p,.hint,.stat .label,.stat small{color:#555}.sb-cell{color:#111;border-color:#bbb}#storyboard .hero{display:block}#storyboard .hero h2{font-size:24px}}
+
+@media(max-width:1000px){.shell{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid var(--line);padding:10px;display:flex;overflow:auto;gap:5px}.side-label,.side-card{display:none}.nav{white-space:nowrap;width:auto;min-width:max-content}.workspace{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.top{padding:12px}.brand small{display:none}.top-actions button{padding:8px;font-size:11px}main{padding:16px}.hero{display:block}.hero .pill{margin-top:12px}.lower{grid-template-columns:1fr}.two,.checklist{grid-template-columns:1fr}.preview-frame iframe{height:420px}.stats{gap:8px}.stat{padding:12px}.stat strong{font-size:19px}}
+
+/* Optimasi layar sentuh dan iPhone 11 (portrait 414 x 896 CSS px) */
+html{min-height:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-padding-top:82px}
+body{min-height:100vh;min-height:100dvh;padding-bottom:env(safe-area-inset-bottom);overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font-size:16px;max-width:100%}
+button{min-height:42px;touch-action:manipulation}
+.top{padding-top:max(10px,env(safe-area-inset-top));}
+img,video,iframe{max-width:100%}
+.sb-cell{overflow-wrap:anywhere}
+@media(max-width:600px){
+  .top{position:sticky;gap:8px;align-items:flex-start;padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right));}
+  .brand{gap:8px;min-width:0;flex:1}.logo{width:36px;height:36px;flex:0 0 36px;border-radius:11px}.brand h1{font-size:15px;line-height:1.25}.brand small{display:block;font-size:10px;line-height:1.25;max-width:130px}
+  .top-actions{gap:5px;justify-content:flex-end;flex:0 0 auto}.top-actions button{min-height:40px;padding:8px 9px;font-size:12px;white-space:nowrap}
+  .shell{display:block;min-height:calc(100dvh - 60px)}
+  aside{position:sticky;top:60px;z-index:9;display:flex;gap:6px;padding:8px max(10px,env(safe-area-inset-left));overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;overscroll-behavior-x:contain;background:#0e1527f5}
+  .nav{flex:0 0 auto;width:auto;min-width:max-content;margin:0;padding:9px 10px;gap:7px;font-size:12px;border-radius:10px}.nav .num{width:23px;height:23px;flex:0 0 23px}
+  main{padding:16px max(12px,env(safe-area-inset-right)) 24px max(12px,env(safe-area-inset-left));}
+  .hero{display:block;margin-bottom:16px}.hero h2{font-size:clamp(25px,7vw,31px);overflow-wrap:anywhere}.hero p{font-size:14px}.hero .pill{margin-top:12px;white-space:normal}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:15px 0}.stat{min-width:0;padding:11px}.stat strong{font-size:18px;overflow-wrap:anywhere}.stat .label{font-size:11px}
+  .workspace,.lower{grid-template-columns:minmax(0,1fr);gap:12px}.panel{border-radius:14px}.panel-head{padding:13px;align-items:flex-start;flex-wrap:wrap}.panel-head h3{font-size:14px}.panel-body{padding:13px}
+  .two{grid-template-columns:minmax(0,1fr);gap:0}.field input,.field textarea,.field select{font-size:16px;padding:12px}.field textarea{min-height:100px}
+  .actions{gap:7px}.actions button{flex:1 1 135px;white-space:normal}
+  .preview{padding:8px}.preview-frame iframe{height:55vh;height:min(560px,55dvh);min-height:360px}.preview-note{flex-wrap:wrap}
+  .codebox textarea{height:210px;font-size:12px;max-width:100%}.code-top{gap:8px;flex-wrap:wrap}
+  .checklist{grid-template-columns:minmax(0,1fr)}.resource{align-items:flex-start;flex-wrap:wrap}.resource a{overflow-wrap:anywhere}
+  .toast{left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom));text-align:center;font-size:13px}
+  #storyboard .panel{max-width:100%}#storyboard .sb-cell{min-width:120px}
+}
+@media(max-width:380px){.brand small{display:none}.top-actions button{padding:7px;font-size:11px}.nav{font-size:11px;padding:8px}.hero h2{font-size:25px}}
+@media(orientation:landscape) and (max-height:500px){.top{position:relative}aside{position:sticky;top:0}.preview-frame iframe{height:65vh;min-height:260px}}
+
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><div class="logo">M</div><div><h1>MPI Studio</h1><small>Interactive Learning beni mohamad</small></div></div>
+  <div class="top-actions"><button class="secondary" id="resetBtn">↺ Reset</button><button id="downloadBtn">↓ Unduh HTML</button></div>
+</header>
+<div class="shell">
+<aside>
+  <div class="side-label">Workspace</div>
+  <button class="nav active" data-step="builder"><span class="num">01</span> Pembuat HTML</button>
+  <button class="nav" data-step="storyboard"><span class="num">02</span> Pembuat Storyboard</button>
+  <button class="nav" data-step="assets"><span class="num">03</span> Rencana Learning Asset</button>
+  <button class="nav" data-step="guide"><span class="num">04</span> Panduan VS Code</button>
+  <button class="nav" data-step="resources"><span class="num">05</span> Referensi</button>
+  <div class="side-card"><b>✦ Workflow cepat</b><p>Isi materi, lihat pratinjau, lalu unduh HTML untuk dibuka dan dikembangkan di VS Code.</p><button class="secondary" style="width:100%" onclick="goStep('guide')">Cara menggunakan</button></div>
+</aside>
+<main>
+<section class="step-content active" id="builder">
+  <div class="hero"><div><div class="eyebrow">Visual workspace / 01</div><h2>Bangun media belajar<br>tanpa mulai dari nol.</h2><p>Buat kerangka halaman pembelajaran interaktif, ubah konten langsung, periksa hasilnya, dan ekspor sebagai file HTML mandiri yang siap dibuka di VS Code.</p></div><span class="pill">● LIVE PREVIEW</span></div>
+  <div class="stats">
+    <div class="stat"><span class="label">Mode aplikasi</span><strong>HTML</strong><small>File tunggal, tanpa instalasi</small></div>
+    <div class="stat"><span class="label">Komponen</span><strong>05</strong><small>Beranda sampai kuis</small></div>
+    <div class="stat"><span class="label">Pratinjau</span><strong>Live</strong><small>Perubahan langsung terlihat</small></div>
+    <div class="stat"><span class="label">Ekspor</span><strong>.html</strong><small>Siap dikembangkan di VS Code</small></div>
+  </div>
+  <div class="workspace">
+    <section class="panel">
+      <div class="panel-head"><div><h3>✎ Editor konten</h3><p>Sesuaikan isi halaman pembelajaran</p></div><span class="pill">EDIT</span></div>
+      <div class="panel-body">
+        <div class="field"><label for="titleInput">Judul pembelajaran</label><input id="titleInput" value="Hakekat Takdir dan Sabar"></div>
+        <div class="field"><label for="subjectInput">Nama mata pelajaran / topik</label><input id="subjectInput" value="Pendidikan Agama Islam"></div>
+        <div class="field"><label for="descInput">Deskripsi singkat</label><textarea id="descInput">Mari memahami makna takdir, sabar, dan penerapannya dalam kehidupan sehari-hari melalui materi dan latihan interaktif.</textarea></div>
+        <div class="two">
+          <div class="field"><label for="teacherInput">Nama pengajar</label><input id="teacherInput" value="Nama Pengajar"></div>
+          <div class="field"><label for="accentInput">Warna aksen</label><select id="accentInput"><option value="#0d9488">Emerald</option><option value="#4f46e5">Indigo</option><option value="#b7791f">Gold</option><option value="#db2777">Rose</option><option value="#2563eb">Blue</option></select></div>
+        </div>
+        <div class="field"><label for="materialInput">Materi inti</label><textarea id="materialInput">Takdir adalah ketetapan Allah SWT. Sabar merupakan sikap teguh, tabah, dan tetap berusaha dalam menghadapi keadaan. Keduanya mengajarkan manusia untuk berikhtiar, berdoa, dan menerima hasil dengan bijaksana.</textarea></div>
+        <div class="field"><label for="questionInput">Pertanyaan kuis</label><input id="questionInput" value="Sikap yang tepat ketika menghadapi kesulitan adalah..."></div>
+        <div class="field"><label for="option1">Pilihan A</label><input id="option1" value="Berusaha, berdoa, dan bersabar"></div>
+        <div class="field"><label for="option2">Pilihan B</label><input id="option2" value="Berhenti berusaha"></div>
+        <div class="field"><label for="option3">Pilihan C</label><input id="option3" value="Menyalahkan orang lain"></div>
+        <div class="field"><label for="correctInput">Jawaban benar</label><select id="correctInput"><option value="0">A</option><option value="1">B</option><option value="2">C</option></select></div>
+        <div class="actions"><button id="refreshBtn">↻ Perbarui pratinjau</button><button class="secondary" id="downloadBtn2">↓ Unduh HTML</button></div>
+        <p class="hint">Catatan: contoh materi dapat diganti sesuai mata pelajaran. Video, gambar, dan logo dapat ditambahkan kemudian melalui VS Code.</p>
+      </div>
+    </section>
+    <section class="panel">
+      <div class="panel-head"><div><h3>▣ Pratinjau aplikasi</h3><p>Tampilan hasil HTML yang akan diekspor</p></div><span class="pill">RESPONSIF</span></div>
+      <div class="preview"><div class="browser"><div class="browserbar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><div class="address">file:///media-pembelajaran.html</div></div><div class="preview-frame"><iframe id="previewFrame" title="Pratinjau halaman pembelajaran"></iframe></div></div><div class="preview-note"><span>● Tampilan interaktif</span><span>Desktop / mobile</span></div></div>
+    </section>
+  </div>
+  <div class="lower">
+    <section class="panel"><div class="panel-head"><div><h3>⌘ Kode HTML hasil</h3><p>Salinan kode dasar yang bisa Anda pelajari</p></div><button class="secondary" id="copyBtn">Salin kode</button></div><div class="panel-body" style="padding:12px"><div class="codebox"><div class="code-top"><span>media-pembelajaran.html</span><span>HTML · CSS · JS</span></div><textarea id="codeOutput" spellcheck="false" aria-label="Kode HTML"></textarea></div></div></section>
+    <section class="panel"><div class="panel-head"><div><h3>✓ Checklist pengerjaan</h3><p>Langkah yang perlu diselesaikan</p></div></div><div class="panel-body"><div class="checklist"><label class="check"><input type="checkbox"><div><b>Siapkan aset visual</b><span>Logo, bumper video, gambar beranda</span></div></label><label class="check"><input type="checkbox"><div><b>Lengkapi materi</b><span>Tujuan, materi, dan referensi</span></div></label><label class="check"><input type="checkbox"><div><b>Uji kuis interaktif</b><span>Periksa jawaban dan umpan balik</span></div></label><label class="check"><input type="checkbox"><div><b>Uji di browser</b><span>Pastikan layout responsif</span></div></label></div></div></section>
+  </div>
+</section>
+
+<section class="step-content" id="storyboard">
+  <div class="hero"><div><div class="eyebrow">Storyboard studio / 02</div><h2>Rancang alur media<br>sebelum produksi.</h2><p>Buat storyboard MPI mengikuti kolom pada LK 1: halaman, durasi, aset visual, narasi/suara, interaktivitas, navigasi, serta keterangan atau prompt. Contoh awal disesuaikan dengan storyboard materi Takdir dan Sabar.</p></div><span class="pill">STORYBOARD BUILDER</span></div>
+  <div class="stats">
+    <div class="stat"><span class="label">Jumlah scene</span><strong id="sceneCount">7</strong><small>Halaman storyboard</small></div>
+    <div class="stat"><span class="label">Total durasi</span><strong id="totalDuration">30 dtk</strong><small>Durasi yang terisi</small></div>
+    <div class="stat"><span class="label">Format</span><strong>MPI</strong><small>Storyboard interaktif</small></div>
+    <div class="stat"><span class="label">Ekspor</span><strong>CSV / JSON</strong><small>Untuk dokumentasi proyek</small></div>
+  </div>
+  <section class="panel">
+    <div class="panel-head"><div><h3>✎ Informasi storyboard</h3><p>Identitas proyek yang muncul pada lembar storyboard</p></div><span class="pill">PROJECT</span></div>
+    <div class="panel-body"><div class="two">
+      <div class="field"><label for="sbProject">Judul media pembelajaran</label><input id="sbProject" value="Hakekat Takdir dan Sabar"></div>
+      <div class="field"><label for="sbAuthor">Penyusun</label><input id="sbAuthor" value="Nama Pengembang"></div>
+    </div><div class="two">
+      <div class="field"><label for="sbAudience">Sasaran peserta didik</label><input id="sbAudience" value="Peserta didik"></div>
+      <div class="field"><label for="sbStyle">Gaya visual</label><select id="sbStyle"><option>Modern, elegan, futuristik, 3D</option><option>Minimalis dan bersih</option><option>Ilustrasi edukatif berwarna</option><option>Fotorealistis sinematik</option></select></div>
+    </div>
+    <div class="field"><label for="sbGoal">Tujuan umum media</label><textarea id="sbGoal">Membantu peserta didik memahami materi Takdir dan Sabar melalui pengantar audiovisual, materi visual, navigasi interaktif, dan evaluasi.</textarea></div></div>
+  </section>
+  <section class="panel" style="margin-top:16px">
+    <div class="panel-head"><div><h3>▤ Daftar scene storyboard</h3><p>Pilih scene untuk diedit. Kolomnya mengikuti format LK 1.</p></div><div class="actions"><button class="secondary" id="sbImportBtn">↑ Impor file lokal</button><input id="sbImportFile" type="file" accept=".json,.csv,application/json,text/csv" hidden><button class="secondary" id="sbAdd">＋ Tambah scene</button><button id="sbExportCsv">↓ Ekspor CSV</button></div></div>
+    <div class="panel-body">
+      <div class="field"><label for="sbSceneSelect">Pilih halaman / scene</label><select id="sbSceneSelect"></select></div>
+      <div class="two">
+        <div class="field"><label for="sbName">Nama halaman</label><input id="sbName"></div>
+        <div class="field"><label for="sbDuration">Durasi (detik)</label><input id="sbDuration" type="number" min="0" value="10"></div>
+      </div>
+      <div class="field"><label for="sbAssets">Aset (Object / Image / Video / Text)</label><textarea id="sbAssets" placeholder="Contoh: logo, video bumper, ilustrasi, judul..."></textarea></div>
+      <div class="field"><label for="sbNarration">Narasi / suara / teks di layar</label><textarea id="sbNarration"></textarea></div>
+      <div class="field"><label for="sbInteraction">Interaktivitas</label><textarea id="sbInteraction" placeholder="Apa yang dilakukan peserta didik?"></textarea></div>
+      <div class="field"><label for="sbNavigation">Navigasi</label><textarea id="sbNavigation" placeholder="Tombol, perpindahan halaman, atau alur setelah interaksi"></textarea></div>
+      <div class="field"><label for="sbPrompt">Keterangan / prompt produksi</label><textarea id="sbPrompt" placeholder="Prompt gambar/video, catatan produksi, atau referensi aset"></textarea></div>
+      <div class="actions"><button id="sbSave">Simpan perubahan scene</button><button class="secondary" id="sbDuplicate">Duplikasikan scene</button><button class="danger" id="sbDelete">Hapus scene</button><button class="secondary" id="sbExportJson">Ekspor JSON</button><button class="secondary" onclick="window.print()">Cetak storyboard</button></div>
+      <p class="hint">Impor storyboard dari file JSON/CSV di komputer. Perubahan otomatis disimpan pada penyimpanan lokal browser di perangkat ini. Ekspor JSON sebagai cadangan agar mudah dipindahkan ke perangkat lain. Untuk file DOCX, konversikan dahulu ke JSON menggunakan file contoh yang disediakan.</p>
+    </div>
+  </section>
+  <section class="panel" style="margin-top:16px">
+    <div class="panel-head"><div><h3>▦ Ringkasan storyboard</h3><p>Pratinjau tabel seluruh scene</p></div><span class="pill">OVERVIEW</span></div>
+    <div style="overflow:auto"><table style="width:100%;border-collapse:collapse;min-width:800px;font-size:12px"><thead><tr style="text-align:left;background:#101a2d;color:#9eacc8"><th style="padding:12px">No.</th><th style="padding:12px">Halaman</th><th style="padding:12px">Durasi</th><th style="padding:12px">Aset</th><th style="padding:12px">Narasi / suara</th><th style="padding:12px">Interaktivitas</th><th style="padding:12px">Navigasi</th></tr></thead><tbody id="sbTableBody"></tbody></table></div>
+  </section>
+</section>
+
+<section class="step-content" id="assets">
+  <div class="hero"><div><div class="eyebrow">Production plan / 02</div><h2>Rencana Learning Asset</h2><p>Susun aset sesuai alur kerja dalam dokumen LK: bumper, video pengantar, beranda, template background, lalu pengemasan media.</p></div><span class="pill">5 TAHAP</span></div>
+  <section class="panel"><div class="panel-head"><div><h3>Daftar tahapan produksi</h3><p>Centang setelah aset selesai dibuat</p></div></div><div class="panel-body">
+  <div class="resource"><div><b>01 · Splash screen / bumper video</b><small>Siapkan logo, buat video intro, lalu simpan MP4.</small></div><label><input type="checkbox" class="asset-check"> Selesai</label></div>
+  <div class="resource"><div><b>02 · Video pengantar</b><small>Siapkan foto, narasi pembuka, dan video pengantar materi.</small></div><label><input type="checkbox" class="asset-check"> Selesai</label></div>
+  <div class="resource"><div><b>03 · Halaman menu utama / beranda</b><small>Judul, identitas, tombol navigasi, dan visual utama.</small></div><label><input type="checkbox" class="asset-check"> Selesai</label></div>
+  <div class="resource"><div><b>04 · Template background</b><small>Buat background konsisten untuk halaman materi.</small></div><label><input type="checkbox" class="asset-check"> Selesai</label></div>
+  <div class="resource"><div><b>05 · Pengemasan media</b><small>Susun slide, tambahkan kuis, simpan dan bagikan hasil.</small></div><label><input type="checkbox" class="asset-check"> Selesai</label></div>
+  <div style="margin-top:16px"><div style="height:8px;background:#0a1222;border-radius:10px;overflow:hidden"><div id="assetProgress" style="height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--blue));transition:.25s"></div></div><p id="assetCount" class="hint">0 dari 5 tahap selesai</p></div>
+  </div></section>
+</section>
+<section class="step-content" id="guide">
+  <div class="hero"><div><div class="eyebrow">Developer guide / 03</div><h2>Mulai di VS Code.</h2><p>Aplikasi ini adalah file HTML mandiri. Anda dapat mengeditnya tanpa memasang framework tambahan.</p></div><span class="pill">BEGINNER FRIENDLY</span></div>
+  <section class="panel"><div class="panel-head"><h3>Langkah penggunaan</h3></div><div class="panel-body">
+  <div class="resource"><div><b>01 · Unduh file HTML</b><small>Klik tombol “Unduh HTML” di kanan atas halaman pembuat.</small></div><span class="pill">DOWNLOAD</span></div>
+  <div class="resource"><div><b>02 · Buka folder di VS Code</b><small>Jalankan VS Code → File → Open Folder, lalu pilih folder kerja Anda.</small></div><span class="pill">OPEN</span></div>
+  <div class="resource"><div><b>03 · Edit file</b><small>Buka media-pembelajaran.html. HTML mengatur struktur, CSS tampilan, dan JavaScript interaksi.</small></div><span class="pill">EDIT</span></div>
+  <div class="resource"><div><b>04 · Jalankan di browser</b><small>Simpan file lalu buka dengan browser. Jika memakai ekstensi Live Server, klik kanan file → Open with Live Server.</small></div><span class="pill">PREVIEW</span></div>
+  <div class="resource"><div><b>05 · Tambahkan aset lokal</b><small>Buat folder assets untuk logo, gambar, dan video. Gunakan path relatif seperti assets/intro.mp4.</small></div><span class="pill">ASSETS</span></div>
+  <div style="margin-top:18px;padding:15px;border:1px solid #31515c;background:#102b33;border-radius:12px"><b style="color:var(--cyan)">Struktur folder yang disarankan</b><pre style="color:#d4e5f4;white-space:pre-wrap;font-size:12px;margin-bottom:0">Proyek-MPI/
+├── media-pembelajaran.html
+└── assets/
+    ├── logo.png
+    ├── bumper.mp4
+    ├── video-pengantar.mp4
+    └── background.jpg</pre></div>
+  </div></section>
+</section>
+<section class="step-content" id="resources">
+  <div class="hero"><div><div class="eyebrow">Helpful links / 04</div><h2>Referensi kerja</h2><p>Alat yang disebut dalam lembar kerja untuk membuat aset visual dan mengemas media pembelajaran.</p></div><span class="pill">RESOURCES</span></div>
+  <section class="panel"><div class="panel-head"><h3>Referensi dan alat</h3></div>
+  <div class="resource"><div><b>Google Flow</b><small>Pembuatan bumper video dan video pengantar</small></div><a href="https://labs.google/fx/tools/flow" target="_blank" rel="noopener">Buka ↗</a></div>
+  <div class="resource"><div><b>ChatGPT</b><small>Membantu menyusun ide dan visual beranda / background</small></div><a href="https://chatgpt.com/" target="_blank" rel="noopener">Buka ↗</a></div>
+  <div class="resource"><div><b>Lumi Education</b><small>Course Presentation, kuis interaktif, dan ekspor H5P</small></div><a href="https://lumi.education/" target="_blank" rel="noopener">Buka ↗</a></div>
+  <div class="resource"><div><b>Visual Studio Code</b><small>Editor kode untuk mengembangkan file HTML</small></div><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">Buka ↗</a></div>
+  <div class="panel-body"><p class="hint">MPI Studio adalah alat bantu HTML sederhana, bukan pengganti Lumi Course Presentation. Hasil HTML ini dapat dikembangkan di VS Code; integrasi video, logo, penyimpanan nilai, atau publikasi online perlu ditambahkan sesuai kebutuhan.</p></div></section>
+</section>
+<div class="footer">MPI STUDIO · Dibuat sebagai starter app untuk membantu produksi media pembelajaran interaktif</div>
+</main>
+</div>
+<div class="toast" id="toast">Berhasil!</div>
+<script>
+const $=id=>document.getElementById(id);
+const fields=['titleInput','subjectInput','descInput','teacherInput','accentInput','materialInput','questionInput','option1','option2','option3','correctInput'];
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function generatedHTML(){
+ const title=$('titleInput').value.trim()||'Media Pembelajaran Interaktif';
+ const subject=$('subjectInput').value.trim()||'Pembelajaran';
+ const desc=$('descInput').value.trim();
+ const teacher=$('teacherInput').value.trim();
+ const accent=$('accentInput').value;
+ const material=$('materialInput').value.trim();
+ const question=$('questionInput').value.trim();
+ const options=[$('option1').value,$('option2').value,$('option3').value];
+ const correct=Number($('correctInput').value);
+ return `<!DOCTYPE html>
+<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1020">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><title>${esc(title)}</title>
+<style>
+:root{--accent:${accent};--ink:#152238;--muted:#64748b;--paper:#f5f8fc}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 Inter,Segoe UI,Arial,sans-serif}.hero{padding:56px 7vw 48px;background:radial-gradient(circle at 90% 20%,#ffffff42,transparent 30%),linear-gradient(130deg,#10233b,var(--accent));color:white}.tag{font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:800;opacity:.85}.hero h1{font-size:clamp(32px,5vw,58px);line-height:1.08;max-width:900px;margin:14px 0}.hero p{max-width:760px;color:#e5efff}.byline{font-size:13px;opacity:.8}.nav{display:flex;gap:8px;flex-wrap:wrap;padding:12px 7vw;background:white;box-shadow:0 4px 18px #1426420c;position:sticky;top:0;z-index:2}.nav button{border:1px solid #dce4ef;background:white;color:#26364d;border-radius:9px;padding:9px 13px;cursor:pointer;font-weight:700}.nav button.active,.primary{background:var(--accent);color:white;border-color:var(--accent)}main{max-width:1100px;margin:28px auto;padding:0 22px}.card{background:white;border:1px solid #e2e9f2;border-radius:18px;padding:clamp(20px,4vw,36px);box-shadow:0 12px 35px #1d35570b;margin-bottom:18px}.card h2{margin-top:0;font-size:25px}.eyebrow{color:var(--accent);font-size:11px;font-weight:900;letter-spacing:1.6px;text-transform:uppercase}.material{white-space:pre-wrap}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.option{display:block;padding:12px;margin:9px 0;border:1px solid #dce4ef;border-radius:11px;cursor:pointer}.option:has(input:checked){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,white)}input{accent-color:var(--accent)}.btn{border:0;background:var(--accent);color:white;padding:11px 16px;border-radius:10px;font-weight:800;cursor:pointer}.feedback{font-weight:800;margin-top:12px}.footer{text-align:center;color:#718096;font-size:12px;padding:25px}.section{display:none}.section.active{display:block}.progress{height:5px;background:#e4eaf2}.progress span{display:block;width:0;height:100%;background:var(--accent)}@media(max-width:650px){.grid{grid-template-columns:1fr}.hero{padding:38px 22px}.nav{position:static;padding:10px 15px}.nav button{font-size:12px}}
+</style></head><body>
+<header class="hero"><div class="tag">${esc(subject)}</div><h1>${esc(title)}</h1><p>${esc(desc)}</p><div class="byline">Disusun oleh ${esc(teacher)}</div></header>
+<nav class="nav"><button class="active" data-target="home">Beranda</button><button data-target="goals">Tujuan</button><button data-target="material">Materi</button><button data-target="quiz">Kuis interaktif</button></nav><div class="progress"><span id="progress"></span></div>
+<main>
+<section class="section active" id="home"><div class="card"><div class="eyebrow">Selamat datang</div><h2>Mulai perjalanan belajar Anda</h2><p>${esc(desc)}</p><button class="btn" data-go="goals">Mulai belajar →</button></div><div class="grid"><div class="card"><h2>📘 Materi</h2><p>Pelajari konsep utama dan catat poin penting.</p><button class="btn" data-go="material">Buka materi</button></div><div class="card"><h2>✦ Latihan</h2><p>Uji pemahaman melalui kuis singkat.</p><button class="btn" data-go="quiz">Kerjakan kuis</button></div></div></section>
+<section class="section" id="goals"><div class="card"><div class="eyebrow">01 / Tujuan pembelajaran</div><h2>Setelah mempelajari materi ini, peserta diharapkan mampu:</h2><ul><li>Menjelaskan konsep utama topik pembelajaran.</li><li>Menghubungkan materi dengan contoh kehidupan sehari-hari.</li><li>Menjawab latihan untuk memeriksa pemahaman.</li></ul><button class="btn" data-go="material">Lanjut ke materi →</button></div></section>
+<section class="section" id="material"><div class="card"><div class="eyebrow">02 / Materi pembelajaran</div><h2>${esc(title)}</h2><div class="material">${esc(material)}</div><p><b>Aktivitas:</b> Tuliskan satu contoh penerapan materi ini dalam kehidupan sehari-hari.</p><button class="btn" data-go="quiz">Lanjut ke kuis →</button></div></section>
+<section class="section" id="quiz"><div class="card"><div class="eyebrow">03 / Evaluasi</div><h2>Kuis pemahaman</h2><p>${esc(question)}</p>${options.map((o,i)=>`<label class="option"><input type="radio" name="answer" value="${i}"> ${String.fromCharCode(65+i)}. ${esc(o)}</label>`).join('')}<button class="btn" id="checkAnswer">Periksa jawaban</button><div class="feedback" id="feedback" aria-live="polite"></div></div></section>
+</main><div class="footer">Media Pembelajaran Interaktif · Terus belajar dan berkembang</div>
+<script>
+function show(id){document.querySelectorAll('.section').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.target===id));document.getElementById('progress').style.width=({'home':'0%','goals':'25%','material':'60%','quiz':'100%'})[id];window.scrollTo({top:0,behavior:'smooth'});}
+document.querySelectorAll('[data-target]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.target)));document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.go)));
+document.getElementById('checkAnswer').addEventListener('click',()=>{const a=document.querySelector('input[name="answer"]:checked'),f=document.getElementById('feedback');if(!a){f.textContent='Pilih salah satu jawaban terlebih dahulu.';f.style.color='#b7791f';return;}if(Number(a.value)===${correct}){f.textContent='Benar! Bagus, Anda memahami materi ini.';f.style.color='#16845b';}else{f.textContent='Belum tepat. Baca kembali materi lalu coba lagi.';f.style.color='#c2415d';}});
+<\/script></body></html>`;
+}
+function toast(msg){$('toast').textContent=msg;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',2200);}
+function update(){const code=generatedHTML();$('codeOutput').value=code;$('previewFrame').srcdoc=code;}
+function download(){const blob=new Blob([generatedHTML()],{type:'text/html;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='media-pembelajaran.html';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);toast('File HTML berhasil disiapkan untuk diunduh.');}
+fields.forEach(id=>$(id).addEventListener('input',update));$('refreshBtn').addEventListener('click',()=>{update();toast('Pratinjau diperbarui.');});$('downloadBtn').addEventListener('click',download);$('downloadBtn2').addEventListener('click',download);
+$('copyBtn').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('codeOutput').value);toast('Kode berhasil disalin.');}catch(e){$('codeOutput').select();document.execCommand('copy');toast('Kode dipilih untuk disalin.');}});
+$('resetBtn').addEventListener('click',()=>{if(confirm('Kembalikan konten ke contoh awal?')){location.reload();}});
+function goStep(id){document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.step===id));document.querySelectorAll('.step-content').forEach(s=>s.classList.toggle('active',s.id===id));window.scrollTo({top:0,behavior:'smooth'});}
+document.querySelectorAll('.nav').forEach(n=>n.addEventListener('click',()=>goStep(n.dataset.step)));
+function updateAssets(){const n=[...document.querySelectorAll('.asset-check')].filter(x=>x.checked).length;$('assetProgress').style.width=(n/5*100)+'%';$('assetCount').textContent=n+' dari 5 tahap selesai';}
+document.querySelectorAll('.asset-check').forEach(x=>x.addEventListener('change',updateAssets));
+
+const storyboardScenes = [
+ {name:'Bumper / Splash Screen',duration:10,assets:'Logo institusi, video bumper / intro, teks identitas.',narration:'',interaction:'Jika halaman diklik, media berpindah ke slide berikutnya.',navigation:'Klik layar untuk melanjutkan ke Pengantar Materi.',prompt:'Buat bumper video 16:9, 3D, HD, modern dan futuristik. Gunakan logo institusi yang disediakan.'},
+ {name:'Pengantar Materi',duration:10,assets:'Video presenter, foto pengajar, latar studio modern.',narration:'Assalamu’alaikum warahmatullahi wabarakatuh. Perkenalkan saya [nama pengajar], saat ini akan menyampaikan materi tentang TAKDIR dan SABAR. Mari kita belajar bersama.',interaction:'Jika halaman diklik, media berpindah ke slide berikutnya.',navigation:'Klik layar atau tombol Mulai untuk menuju Beranda.',prompt:'Buat video pengantar dengan kamera sinematik, studio modern dan elegan, presenter profesional.'},
+ {name:'Beranda / Halaman Utama',duration:0,assets:'Judul “HAKEKAT TAKDIR ALLAH SWT”, tombol Beranda, Tujuan Pembelajaran, Materi Pembelajaran, Soal Interaktif.',narration:'Menampilkan halaman utama yang memuat judul materi dan navigasi.',interaction:'Peserta didik memilih menu yang ingin dibuka.',navigation:'Empat menu: Beranda, Tujuan Pembelajaran, Materi Pembelajaran, Soal Interaktif.',prompt:'Desain halaman MPI modern, elegan, futuristik, dominan hijau, kuning, dan putih.'},
+ {name:'Tujuan Pembelajaran',duration:0,assets:'Gambar atau template tujuan pembelajaran dan teks tujuan.',narration:'Peserta didik mampu menjelaskan makna QS. Ali Imran ayat 200, menunjukkan sikap sabar, teguh, disiplin, serta menerapkan nilai-nilai tersebut dalam kehidupan sehari-hari.',interaction:'Peserta didik membaca tujuan pembelajaran.',navigation:'Klik tombol Selanjutnya untuk menuju Materi.',prompt:'Buat halaman tujuan pembelajaran yang bersih, terbaca, dan konsisten dengan desain beranda.'},
+ {name:'Materi',duration:0,assets:'Teks materi dan infografis 9:16 tentang Takdir dan Sabar.',narration:'Takdir Allah SWT itu pasti selalu yang terbaik. Apabila kita merasa belum baik, berarti takdir-Nya belum selesai. Tugas kita adalah SABAR dan KUATKAN KESABARAN (QS Ali Imran: 200).',interaction:'Peserta didik membaca materi dan mengamati infografis.',navigation:'Tombol Sebelumnya, Beranda, dan Selanjutnya menuju Soal Interaktif.',prompt:'Buat infografis 9:16, 3D, HD, elegan, modern, futuristik, latar hijau neon; sertakan ayat relevan dan artinya dengan sumber yang dapat diverifikasi.'},
+ {name:'Soal Interaktif',duration:0,assets:'Pilihan ganda, soal True/False, aktivitas Drag the Words, indikator skor.',narration:'Pertanyaan pilihan ganda tentang ayat Al-Qur’an yang berisi perintah sabar dan kuatkan kesabaran. Pernyataan benar/salah dan latihan melengkapi kata.',interaction:'Jawaban benar memperoleh poin. Drag the Words melengkapi kata SABAR dan KUATKAN KESABARAN.',navigation:'Setelah semua soal selesai, lanjut ke halaman Referensi.',prompt:'Buat evaluasi interaktif dengan umpan balik langsung, skor, tombol Sebelumnya, Beranda, dan Selanjutnya.'},
+ {name:'Referensi',duration:0,assets:'Daftar referensi dan tautan sumber.',narration:'Referensi: Al-Qur’an dan Terjemahannya; Lumi Education; ChatGPT; Google Flow.',interaction:'Peserta didik dapat membuka sumber eksternal.',navigation:'Tombol kembali ke Beranda atau akhiri media.',prompt:'Tampilkan daftar referensi secara rapi, dengan tautan yang bisa diklik.'}
+];
+let activeScene=0;
+const SB_STORAGE_KEY='mpiStudio.storyboard.v1';
+function persistStoryboard(){
+ try{
+  localStorage.setItem(SB_STORAGE_KEY,JSON.stringify({
+   project:$('sbProject').value,author:$('sbAuthor').value,audience:$('sbAudience').value,
+   visualStyle:$('sbStyle').value,goal:$('sbGoal').value,scenes:storyboardScenes
+  }));
+ }catch(e){console.warn('Penyimpanan lokal tidak tersedia',e);}
+}
+function restoreStoryboard(){
+ try{
+  const raw=localStorage.getItem(SB_STORAGE_KEY); if(!raw)return false;
+  const data=JSON.parse(raw); if(!data||!Array.isArray(data.scenes)||!data.scenes.length)return false;
+  ['project','author','audience','goal'].forEach(k=>{
+   const ids={project:'sbProject',author:'sbAuthor',audience:'sbAudience',goal:'sbGoal'};
+   if(data[k]!==undefined)$(ids[k]).value=data[k];
+  });
+  if(data.visualStyle){const sel=$('sbStyle');if([...sel.options].some(o=>o.text===data.visualStyle))sel.value=data.visualStyle;else{const opt=document.createElement('option');opt.text=data.visualStyle;sel.add(opt);sel.value=data.visualStyle;}}
+  storyboardScenes.splice(0,storyboardScenes.length,...data.scenes.map(normalizeScene));
+  return true;
+ }catch(e){return false;}
+}
+function normalizeScene(x){
+ return {name:String(x.name??x.halaman??'Scene tanpa judul'),duration:Math.max(0,Number(x.duration??x['Durasi (detik)']??0)||0),
+ assets:String(x.assets??x['Aset (Object/Image/Video/Text)']??x['Aset (Objek/Gambar/Video/Teks)']??''),
+ narration:String(x.narration??x['Narasi/Suara']??x['Narasi / suara / teks di layar']??''),
+ interaction:String(x.interaction??x['Interaktivitas']??''),navigation:String(x.navigation??x['Navigasi']??''),
+ prompt:String(x.prompt??x['Keterangan/Prompt']??x['Keterangan / Prompt']??'')};
+}
+function parseCSV(text){
+ const rows=[];let row=[],cell='',quoted=false;
+ for(let i=0;i<text.length;i++){const c=text[i];
+  if(c==='"'&&quoted&&text[i+1]==='"'){cell+='"';i++;}
+  else if(c==='"')quoted=!quoted;
+  else if(c===','&&!quoted){row.push(cell);cell='';}
+  else if((c==='\n'||c==='\r')&&!quoted){if(c==='\r'&&text[i+1]==='\n')i++;row.push(cell);if(row.some(v=>v.trim()))rows.push(row);row=[];cell='';}
+  else cell+=c;
+ }
+ if(cell.length||row.length){row.push(cell);rows.push(row);}
+ const headers=(rows.shift()||[]).map(h=>h.replace(/^\uFEFF/,'').trim().toLowerCase());
+ const find=(...terms)=>headers.findIndex(h=>terms.some(t=>h.includes(t)));
+ const ix={name:find('halaman','nama halaman','scene'),duration:find('durasi'),assets:find('aset'),narration:find('narasi'),interaction:find('interaktivitas'),navigation:find('navigasi'),prompt:find('prompt','keterangan')};
+ return rows.map(r=>normalizeScene({
+  name:r[ix.name]||'',duration:r[ix.duration]||0,assets:r[ix.assets]||'',narration:r[ix.narration]||'',
+  interaction:r[ix.interaction]||'',navigation:r[ix.navigation]||'',prompt:r[ix.prompt]||''
+ })).filter(x=>x.name||x.assets||x.narration);
+}
+function fillSceneSelect(){const s=$('sbSceneSelect');s.innerHTML='';storyboardScenes.forEach((x,i)=>{const o=document.createElement('option');o.value=i;o.textContent=(i+1)+'. '+x.name;s.appendChild(o)});s.value=activeScene;}
+function loadScene(){const x=storyboardScenes[activeScene];if(!x)return;$('sbSceneSelect').value=activeScene;$('sbName').value=x.name;$('sbDuration').value=x.duration;$('sbAssets').value=x.assets;$('sbNarration').value=x.narration;$('sbInteraction').value=x.interaction;$('sbNavigation').value=x.navigation;$('sbPrompt').value=x.prompt;}
+function saveScene(silent=false){const x=storyboardScenes[activeScene];if(!x)return;x.name=$('sbName').value.trim()||'Scene tanpa judul';x.duration=Math.max(0,Number($('sbDuration').value)||0);x.assets=$('sbAssets').value;x.narration=$('sbNarration').value;x.interaction=$('sbInteraction').value;x.navigation=$('sbNavigation').value;x.prompt=$('sbPrompt').value;renderStoryboard();fillSceneSelect();$('sbSceneSelect').value=activeScene;persistStoryboard();if(!silent)toast('Scene storyboard disimpan dan tersimpan lokal.');}
+function renderStoryboard(){const body=$('sbTableBody');body.innerHTML='';storyboardScenes.forEach((x,i)=>{const tr=document.createElement('tr');tr.style.cursor='pointer';tr.title='Klik untuk mengedit scene';[i+1,x.name,(x.duration||0)+' dtk',x.assets,x.narration,x.interaction,x.navigation].forEach(v=>{const td=document.createElement('td');td.className='sb-cell';td.textContent=v;tr.appendChild(td)});tr.addEventListener('click',()=>{saveScene(true);activeScene=i;fillSceneSelect();loadScene();});body.appendChild(tr)});$('sceneCount').textContent=storyboardScenes.length;const total=storyboardScenes.reduce((sum,x)=>sum+(Number(x.duration)||0),0);$('totalDuration').textContent=total+' dtk';persistStoryboard();}
+function csvEscape(v){return '"'+String(v??'').replace(/"/g,'""')+'"';}
+function downloadData(content,type,name){const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);toast('File ekspor berhasil disiapkan.');}
+$('sbSceneSelect').addEventListener('change',()=>{saveScene(true);activeScene=Number($('sbSceneSelect').value);loadScene();});
+$('sbSave').addEventListener('click',()=>saveScene());
+$('sbAdd').addEventListener('click',()=>{saveScene(true);storyboardScenes.push({name:'Scene baru',duration:0,assets:'',narration:'',interaction:'',navigation:'',prompt:''});activeScene=storyboardScenes.length-1;fillSceneSelect();loadScene();renderStoryboard();toast('Scene baru ditambahkan.');});
+$('sbDuplicate').addEventListener('click',()=>{saveScene(true);const copy={...storyboardScenes[activeScene],name:storyboardScenes[activeScene].name+' (Salinan)'};storyboardScenes.splice(activeScene+1,0,copy);activeScene++;fillSceneSelect();loadScene();renderStoryboard();toast('Scene berhasil diduplikasi.');});
+$('sbDelete').addEventListener('click',()=>{if(storyboardScenes.length<=1){toast('Minimal harus ada satu scene.');return;}if(confirm('Hapus scene ini dari storyboard?')){storyboardScenes.splice(activeScene,1);activeScene=Math.max(0,activeScene-1);fillSceneSelect();loadScene();renderStoryboard();toast('Scene dihapus.');}});
+$('sbExportCsv').addEventListener('click',()=>{saveScene(true);const header=['No','Halaman','Durasi (detik)','Aset (Object/Image/Video/Text)','Narasi/Suara','Interaktivitas','Navigasi','Keterangan/Prompt'];const rows=storyboardScenes.map((x,i)=>[i+1,x.name,x.duration,x.assets,x.narration,x.interaction,x.navigation,x.prompt]);downloadData('\\ufeff'+[header,...rows].map(r=>r.map(csvEscape).join(',')).join('\\r\\n'),'text/csv;charset=utf-8','storyboard-mpi.csv');});
+$('sbExportJson').addEventListener('click',()=>{saveScene(true);const data={project:$('sbProject').value,author:$('sbAuthor').value,audience:$('sbAudience').value,visualStyle:$('sbStyle').value,goal:$('sbGoal').value,scenes:storyboardScenes};downloadData(JSON.stringify(data,null,2),'application/json;charset=utf-8','storyboard-mpi.json');});
+$('sbImportBtn').addEventListener('click',()=>$('sbImportFile').click());
+$('sbImportFile').addEventListener('change',async e=>{
+ const file=e.target.files&&e.target.files[0];if(!file)return;
+ try{
+  const content=await file.text();let imported=[],meta={};
+  if(file.name.toLowerCase().endsWith('.json')){
+   const parsed=JSON.parse(content);imported=Array.isArray(parsed)?parsed:(parsed.scenes||parsed.storyboard||[]);
+   meta=Array.isArray(parsed)?{}:parsed;
+  }else if(file.name.toLowerCase().endsWith('.csv')) imported=parseCSV(content);
+  else throw new Error('Format belum didukung. Gunakan JSON atau CSV.');
+  if(!imported.length)throw new Error('Tidak ditemukan scene storyboard di file ini.');
+  if(!confirm('Impor '+imported.length+' scene dari "'+file.name+'"? Storyboard yang sedang terbuka akan diganti.'))return;
+  if(meta.project)$('sbProject').value=meta.project;
+  if(meta.author)$('sbAuthor').value=meta.author;
+  if(meta.audience)$('sbAudience').value=meta.audience;
+  if(meta.goal)$('sbGoal').value=meta.goal;
+  if(meta.visualStyle){const sel=$('sbStyle');let opt=[...sel.options].find(o=>o.text===meta.visualStyle);if(!opt){opt=document.createElement('option');opt.text=meta.visualStyle;sel.add(opt);}sel.value=meta.visualStyle;}
+  storyboardScenes.splice(0,storyboardScenes.length,...imported.map(normalizeScene));
+  activeScene=0;fillSceneSelect();loadScene();renderStoryboard();persistStoryboard();
+  toast('Berhasil mengimpor '+imported.length+' scene.');
+ }catch(err){alert('Gagal mengimpor storyboard: '+err.message);}
+ finally{e.target.value='';}
+});
+['sbProject','sbAuthor','sbAudience','sbStyle','sbGoal'].forEach(id=>$(id).addEventListener('change',persistStoryboard));
+$('sbExportJson').addEventListener('click',()=>persistStoryboard());
+restoreStoryboard();
+fillSceneSelect();loadScene();renderStoryboard();
+
+update();
+</script>
+</body>
+</html>
